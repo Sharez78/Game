@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title> Game</title>
+    <link rel="stylesheet" type="text/css" href="style.css">
+</head>
+<body>
+    <h1>Guess Cheyyandi rawww</h1>
+    <div id="word"></div>
+    <form>
+        <label for="guess">Enter a letter:</label>
+        <input type="text" id="guess" maxlength="1" autofocus>
+        <button type="submit">Submit</button>
+    </form>
+    <p id="message"></p>
+    <script>
+var words = ["zass", "suhana", "sharez", "zameer", "asra"];
+var word = words[Math.floor(Math.random() * words.length)];
+var displayWord = "";
+var lives = 10; // Add 10 lives
+for (var i = 0; i < word.length; i++) {
+    displayWord += "_ ";
+}
+document.getElementById("word").innerHTML = displayWord;
+
+var form = document.querySelector("form");
+form.addEventListener("submit", function(event) {
+    event.preventDefault();
+    var guess = document.getElementById("guess").value.toLowerCase();
+    checkLetter(guess);
+});
+
+function checkLetter(letter) {
+    var found = false;
+    for (var i = 0; i < word.length; i++) {
+        if (word.charAt(i) == letter) {
+            displayWord = displayWord.substring(0, i*2) + letter + displayWord.substring(i*2+1);
+            found = true;
+        }
+    }
+    if (!found) {
+        lives--; // Decrease lives by 1
+        document.getElementById("message").innerHTML = "Wrong letter. You have " + lives + " lives left. Please try again.";
+        if (lives == 0) {
+            document.getElementById("message").innerHTML = "Game over. The word was '" + word + "'.";
+            disableInput();
+        }
+    } else {
+        document.getElementById("word").innerHTML = displayWord;
+        if (displayWord.indexOf("_") == -1) {
+            document.getElementById("message").innerHTML = "Congratulations, you win!";
+            disableInput();
+        }
+    }
+}
+
+function disableInput() {
+    var input = document.getElementById("guess");
+    input.disabled = true;
+    var button = document.querySelector("button[type='submit']");
+    button.disabled = true;
+}
+
+</script>
+</body>
+</html>
